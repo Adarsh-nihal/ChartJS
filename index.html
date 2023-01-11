@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart</title>
+</head>
+<body>
+    <input id="month" placeholder="month"/>
+    <input id="performance" placeholder="performance"/>
+    <input id="attendence" placeholder="attendence"/>
+    <button id="btn">Add New Data</button>
+    <button id="remove">Remove Last</button>
+
+
+    <canvas id="chart" ></canvas>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript">
+        var ctx,chart
+       window.addEventListener("load",function(){
+       
+        var btn=document.getElementById("btn")
+        btn.addEventListener('click',()=>{
+            var month=document.getElementById("month").value
+        var performance=document.getElementById("performance").value
+        var attendence=document.getElementById("attendence").value
+        let payload={month,performance,attendence}
+
+            addData(chart,payload)
+        })
+
+        ctx=document.getElementById('chart')
+        chart=new Chart(ctx,{
+            type:"bar",
+            data:{
+                labels:['January','February','March','April','May',"June","July"],
+                datasets:[
+                    {
+                    label:'attendence',
+                    data:[100,45,60,80,67,70,80],
+                    backgroundColor:[
+                        createColor(255),
+                        createColor(255),
+                        createColor(255),
+                        createColor(255),
+                        createColor(255),
+                        createColor(255),
+                    ]
+                },  {
+                    label:'performance',
+                    data:[80,50,60,80,70,75,90],
+                    backgroundColor:[
+                        createColor(255),
+                        createColor(255),
+                        createColor(255),
+                        createColor(255),
+                        createColor(255),
+                        createColor(255),
+                    ]
+                }
+            ],
+                borderWidth:1
+            }
+        })
+       })
+
+
+       var remove=document.getElementById("remove")
+       remove.addEventListener("click",()=>{
+        removeData(chart)
+    })
+
+       function addData(chart,{month,performance,attendence}){
+        chart.data.labels.push(month)
+        chart.data.datasets[0].data.push(attendence)
+        chart.data.datasets[1].data.push(performance)
+        chart.update()
+
+       }
+
+       function removeData(chart){
+      chart.data.labels.pop()
+      chart.data.datasets.forEach(datasets=>{
+        datasets.data.pop()
+      })
+      chart.update()
+       }
+
+       function random(num){
+        return Math.floor(Math.random()*num)
+       }
+
+      function createColor(num){
+        return `rgba(${random(255)},${random(255)},${random(255)})`
+      }
+
+    </script>
+</body>
+</html>
